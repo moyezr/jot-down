@@ -52,7 +52,20 @@ const Item = ({
   const { user } = useUser();
   const create = useMutation(api.documents.create);
   const router = useRouter();
-  // cnost archive = useMutation(api.documents.archive);
+  const archive = useMutation(api.documents.archive);
+
+  const onArchive = (event: React.MouseEvent<HTMLDivElement, MouseEvent>) => {
+    event.stopPropagation();
+    if (!id) return;
+
+    const promise = archive({ id }).then(() => router.push("/documents"));
+
+    toast.promise(promise, {
+      loading: "Moving to trash...",
+      success: "Note moved to trash!",
+      error: "Failed to archive note.",
+    });
+  };
 
   const handleExpand = (
     event: React.MouseEvent<HTMLDivElement, MouseEvent>

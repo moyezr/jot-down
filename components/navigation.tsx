@@ -17,6 +17,7 @@ import UserItem from "./user-item";
 import Item from "./item";
 import { api } from "@/convex/_generated/api";
 import { toast } from "sonner";
+import DocumentList from "./document-list";
 
 type Props = {};
 
@@ -149,7 +150,7 @@ const Navigation = (props: Props) => {
           <Item onClick={handleCreate} label="New Page" icon={PlusCircle} />
         </div>
         <div className="mt-4">
-          <p>Documents</p>
+          <DocumentList />
         </div>
 
         <div

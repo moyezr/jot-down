@@ -1,11 +1,22 @@
 "use client";
 
 import { cn } from "@/lib/utils";
-import { ChevronLeft, ChevronsLeft, MenuIcon } from "lucide-react";
+import {
+  ChevronLeft,
+  ChevronsLeft,
+  MenuIcon,
+  PlusCircle,
+  Search,
+  Settings,
+} from "lucide-react";
 import { useParams, usePathname, useRouter } from "next/navigation";
 import { ElementRef, MouseEvent, useEffect, useRef, useState } from "react";
 import { useMediaQuery } from "usehooks-ts";
-import Navbar from "./marketing/navbar";
+import { useMutation } from "convex/react";
+import UserItem from "./user-item";
+import Item from "./item";
+import { api } from "@/convex/_generated/api";
+import { toast } from "sonner";
 
 type Props = {};
 
@@ -14,7 +25,7 @@ const Navigation = (props: Props) => {
   const pathname = usePathname();
   const params = useParams();
   const isMobile = useMediaQuery("(max-width: 768px)");
-
+  const create = useMutation(api.documents.create);
   const isResizingRef = useRef(false);
   const sidebarRef = useRef<ElementRef<"aside">>(null);
   const navbarRef = useRef<ElementRef<"div">>(null);
@@ -33,8 +44,7 @@ const Navigation = (props: Props) => {
     if (isMobile) {
       collapse();
     }
-  }),
-    [pathname, isMobile];
+  }, [pathname, isMobile]);
 
   const handleMouseDown = (
     event: React.MouseEvent<HTMLDivElement, MouseEvent>
@@ -43,6 +53,7 @@ const Navigation = (props: Props) => {
     event.stopPropagation();
 
     isResizingRef.current = true;
+    // @ts-ignore
     document.addEventListener("mousemove", handleMouseMove);
     document.addEventListener("mouseup", handleMouseUp);
   };
@@ -68,6 +79,7 @@ const Navigation = (props: Props) => {
 
   const handleMouseUp = () => {
     isResizingRef.current = false;
+    // @ts-ignore
     document.removeEventListener("mousemove", handleMouseMove);
     document.removeEventListener("mouseup", handleMouseUp);
   };
@@ -101,12 +113,21 @@ const Navigation = (props: Props) => {
     }
   };
 
+  const handleCreate = () => {
+    const promise = create({ title: "Untitled" });
+
+    toast.promise(promise, {
+      loading: "Creating a new note...",
+      success: "New note created!",
+      error: "Failed to creata a new note.",
+    });
+  };
   return (
     <>
       <aside
         ref={sidebarRef}
         className={cn(
-          "group/sidebar h-full bg-secondary overflow-y-auto relative flex w-60 flex-col z-[9999]",
+          "group/sidebar h-full bg-secondary overflow-y-auto relative flex w-60 flex-col z-[99999]",
           isResetting && "transition-all ease-in-out duration-300",
           isMobile && "w-0"
         )}
@@ -122,13 +143,17 @@ const Navigation = (props: Props) => {
           <ChevronsLeft className="h-6 w-6" />
         </div>
         <div>
-          <p>Action Items</p>
+          <UserItem />
+          <Item label="Search" icon={Search} isSearch onClick={() => {}} />
+          <Item label="Settings" icon={Settings} onClick={() => {}} />
+          <Item onClick={handleCreate} label="New Page" icon={PlusCircle} />
         </div>
         <div className="mt-4">
           <p>Documents</p>
         </div>
 
         <div
+          // @ts-ignore
           onMouseDown={handleMouseDown}
           onClick={resetWidth}
           className="opacity-0 group-hover/sidebar:opacity-100 transition cursor-ew-resize absolute h-full w-1 bg-primary/10 right-0 top-0"
@@ -137,7 +162,7 @@ const Navigation = (props: Props) => {
       <div
         ref={navbarRef}
         className={cn(
-          "absolute top-0 z-[99999] left-60 w-[calc(100%-240px)]",
+          "absolute top-0 z-[9999] left-60 w-[calc(100%-240px)]",
           isResetting && "transition-all ease-in-out duration-300",
           isMobile && "left-0 w-full"
         )}

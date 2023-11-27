@@ -26,9 +26,11 @@ import {
   PopoverTrigger,
 } from "@/components/ui/popover";
 import TrashBox from "./trash-box";
+import { useSearch } from "@/hooks/use-search";
 type Props = {};
 
 const Navigation = (props: Props) => {
+  const search = useSearch();
   const router = useRouter();
   const pathname = usePathname();
   const params = useParams();
@@ -152,7 +154,7 @@ const Navigation = (props: Props) => {
         </div>
         <div>
           <UserItem />
-          <Item label="Search" icon={Search} isSearch onClick={() => {}} />
+          <Item label="Search" icon={Search} isSearch onClick={search.onOpen} />
           <Item label="Settings" icon={Settings} onClick={() => {}} />
           <Item onClick={handleCreate} label="New Page" icon={PlusCircle} />
         </div>

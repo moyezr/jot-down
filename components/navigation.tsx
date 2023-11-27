@@ -2,7 +2,6 @@
 
 import { cn } from "@/lib/utils";
 import {
-  ChevronLeft,
   ChevronsLeft,
   MenuIcon,
   Plus,
@@ -27,9 +26,11 @@ import {
 } from "@/components/ui/popover";
 import TrashBox from "./trash-box";
 import { useSearch } from "@/hooks/use-search";
+import { useSettings } from "@/hooks/use-settings";
 type Props = {};
 
 const Navigation = (props: Props) => {
+  const settings = useSettings();
   const search = useSearch();
   const router = useRouter();
   const pathname = usePathname();
@@ -155,7 +156,7 @@ const Navigation = (props: Props) => {
         <div>
           <UserItem />
           <Item label="Search" icon={Search} isSearch onClick={search.onOpen} />
-          <Item label="Settings" icon={Settings} onClick={() => {}} />
+          <Item label="Settings" icon={Settings} onClick={settings.onOpen} />
           <Item onClick={handleCreate} label="New Page" icon={PlusCircle} />
         </div>
         <div className="mt-4">
@@ -165,7 +166,10 @@ const Navigation = (props: Props) => {
             <PopoverTrigger className="w-full mt-4">
               <Item label="Trash" icon={Trash} />
             </PopoverTrigger>
-            <PopoverContent className="p-0 w-72" side={isMobile ? "bottom" : "right"}>
+            <PopoverContent
+              className="p-0 w-72"
+              side={isMobile ? "bottom" : "right"}
+            >
               <TrashBox />
             </PopoverContent>
           </Popover>

@@ -27,6 +27,7 @@ import {
 import TrashBox from "./trash-box";
 import { useSearch } from "@/hooks/use-search";
 import { useSettings } from "@/hooks/use-settings";
+import Navbar from "./navbar";
 type Props = {};
 
 const Navigation = (props: Props) => {
@@ -190,19 +191,19 @@ const Navigation = (props: Props) => {
           isMobile && "left-0 w-full"
         )}
       >
-        {/* {!!params.documentId ? (
+        {!!params.documentId ? (
           <Navbar isCollapsed={false} onResetWidth={resetWidth} />
-        ) : ( */}
-        <nav className="bg-transparent px-3 py-2 w-full">
-          {isCollapsed && (
-            <MenuIcon
-              onClick={resetWidth}
-              role="button"
-              className="h-6 w-6 text-muted-foreground"
-            />
-          )}
-        </nav>
-        {/* )} */}
+        ) : (
+          <nav className="bg-transparent px-3 py-2 w-full">
+            {isCollapsed && (
+              <MenuIcon
+                onClick={resetWidth}
+                role="button"
+                className="h-6 w-6 text-muted-foreground"
+              />
+            )}
+          </nav>
+        )}
       </div>
     </>
   );
